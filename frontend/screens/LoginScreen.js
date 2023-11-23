@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, TextInput, Image } from 'react-native'
 import Colors from 'frontend/constants/colors.js'
@@ -8,12 +8,47 @@ export default function LoginScreen() {
 
     const navigation = useNavigation();
 
+    const [userData, setUserData] = useState({
+        email: '',
+        password: ''
+    })
+
+    const [errorMsg, setErrorMsg] = useState(null);
+
     const handleSignupPress = () => {
         navigation.navigate('Signup')
     }
 
     const handleHomePress = () => {
-        navigation.navigate('Home')
+        if(userData.email == '' || userData.password == '') {
+            setErrorMsg('All fields are required');
+            return;
+        }
+        else {
+            fetch('http://192.168.29.5:3000/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(userData)
+                })
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data);
+                    if(data.error) {
+                        setErrorMsg(data.error)
+                    }
+                    else {
+                        setUserData({...userData,
+                            email: '',
+                            password: ''
+                        })
+                        setErrorMsg(null);
+                        navigation.navigate('Home');
+                    }
+                })
+                .catch(error => console.error('Error message:', error));
+        }
     }
 
     return (
@@ -56,15 +91,23 @@ export default function LoginScreen() {
                 }}>Sign Up</Text>
                 </TouchableOpacity>
 
+                {
+                    errorMsg && <Text style={{color: 'red'}}>{errorMsg}</Text>
+                }
+
                 <TextInput
                     style={styles.input}
                     placeholder="Email"
                     keyboardType="email-address"
+                    onPressIn={() => setErrorMsg(null)}
+                    onChangeText={(text) => setUserData({ ...userData, email: text })}
                 />
                 <TextInput
                     style={styles.input}
                     placeholder="Password"
                     secureTextEntry={true}
+                    onPressIn={() => setErrorMsg(null)}
+                    onChangeText={(text) => setUserData({ ...userData, password: text })}
                 />
 
 
