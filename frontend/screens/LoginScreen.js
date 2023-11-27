@@ -25,7 +25,7 @@ export default function LoginScreen() {
             return;
         }
         else {
-            fetch('http://192.168.29.5:3000/login', {
+            fetch(`http://${process.env.LOCALHOST}:3000/login`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

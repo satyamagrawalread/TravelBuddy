@@ -34,7 +34,7 @@ export default function SignupScreen() {
                 setErrorMsg("Password & Confirm Password does not match");
             }
             else {
-                fetch('http://192.168.29.5:3000/signup', {
+                fetch(`http://${process.env.LOCALHOST}:3000/signup`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
