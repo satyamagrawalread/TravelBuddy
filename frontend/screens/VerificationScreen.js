@@ -1,32 +1,36 @@
-import React, { useState } from 'react'
-import { useNavigation } from '@react-navigation/native'
 import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, TextInput, Image } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { useNavigation } from '@react-navigation/native';
 import Colors from '../constants/colors.js'
 import BUTTON from '../components/buttons.js'
 
-export default function LoginScreen() {
-
+export default function VerificationScreen({route}) {
+    const {userData} = route.params;
+    console.log("From verification page, code:", userData?.verificationCode);
     const navigation = useNavigation();
-
-    const [userData, setUserData] = useState({
-        email: '',
-        password: ''
-    })
-
+    const [code, setCode] = useState(null);
     const [errorMsg, setErrorMsg] = useState(null);
 
-    const handleSignupPress = () => {
-        navigation.navigate('Signup')
-    }
+    // useEffect(() => {
+    //     alert("Code has been sent to your Email")
+    // }, [])
 
-    const handleHomePress = () => {
-        if(userData.email == '' || userData.password == '') {
-            setErrorMsg('All fields are required');
-            return;
+    const handleSubmitPress = () => {
+        console.log(userData);
+        
+
+        if(
+            code == ''
+        ) {
+            setErrorMsg("Please enter the code");
         }
         else {
-            console.log(process.env.REACT_APP_LOCALHOST);
-            fetch(`http://${process.env.REACT_APP_LOCALHOST}:3000/login`, {
+            if(userData.verificationCode != code) {
+                setErrorMsg("Verification code is incorrect");
+            }
+            else {
+                
+                fetch(`http://${process.env.REACT_APP_LOCALHOST}:3000/signup`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -40,85 +44,44 @@ export default function LoginScreen() {
                         setErrorMsg(data.error)
                     }
                     else {
-                        setUserData({...userData,
-                            email: '',
-                            password: ''
-                        })
+                        alert('Account created successfully');
+                        
                         setErrorMsg(null);
-                        navigation.navigate('Home');
+                        navigation.navigate('Login');
                     }
                 })
                 .catch(error => console.error('Error message:', error));
+
+                
+            }
         }
+        // navigation.navigate('Login')
     }
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <View style={{ flex: 1, marginHorizontal: 22, marginTop: 40, alignItems: 'center', }}>
 
-                <Text style={{
-                    fontSize: 22,
-                    fontWeight: 'bold',
-                    marginTop: 50,
-                    color: Colors.primary,
-                }}>HELLO AGAIN! 👋🏻 </Text>
-
-                <Text style={{
-                    fontSize: 16,
-                    fontWeight: 'light',
-                    marginVertical: 20,
-                    marginHorizontal: 10,
-                    color: Colors.secondary,
-                    textAlign: 'center'
-                }}>Welcome Back, You have been missed</Text>
-
-                <Text style={{
-                fontSize: 16,
-                fontWeight: '500',
-                marginVertical:10,
-                marginHorizontal:10,
-                color: Colors.primary,  
-                textAlign: 'center'
-                }}>Don't Have an account?</Text>
-              
-              <TouchableOpacity onPress={handleSignupPress}>
-                    <Text style={{
-                fontSize: 16,
-                fontWeight: '500',
-                marginHorizontal:10,
-                color: Colors.primary,  
-                textAlign: 'center',
-                textDecorationLine: 'underline',
-                }}>Sign Up</Text>
-                </TouchableOpacity>
-
                 {
-                    errorMsg && <Text style={{color: 'red'}}>{errorMsg}</Text>
+                    errorMsg && <Text style={{ color: 'red' }}>{errorMsg}</Text>
                 }
 
                 <TextInput
                     style={styles.input}
-                    placeholder="Email"
-                    keyboardType="email-address"
+                    placeholder="Enter 6 digits veriification code"
+                    // keyboardType="number"
                     onPressIn={() => setErrorMsg(null)}
-                    onChangeText={(text) => setUserData({ ...userData, email: text })}
-                />
-                <TextInput
-                    style={styles.input}
-                    placeholder="Password"
-                    secureTextEntry={true}
-                    onPressIn={() => setErrorMsg(null)}
-                    onChangeText={(text) => setUserData({ ...userData, password: text })}
+                    onChangeText={(text) => setCode(text)}
                 />
 
 
 
                 <BUTTON
-                    title="Login"
-                    onPress={handleHomePress}
+                    title="Submit"
+                    onPress={handleSubmitPress}
                 />
 
-                <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 30 }}>
+                {/* <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 30 }}>
                     <View style={{
                         flex: 1,
                         height: 1,
@@ -155,7 +118,7 @@ export default function LoginScreen() {
                         }}
                     >
                         <Image
-                            source={require('../images/google.png')}
+                            source={require('frontend/images/google.png')}
                             style={{
                                 height: 36,
                                 width: 36,
@@ -181,7 +144,7 @@ export default function LoginScreen() {
                         }}
                     >
                         <Image
-                            source={require('../images/facebook.png')}
+                            source={require('frontend/images/facebook.png')}
                             style={{
                                 height: 36,
                                 width: 36,
@@ -193,7 +156,7 @@ export default function LoginScreen() {
                     </TouchableOpacity>
 
 
-                </View>
+                </View> */}
 
             </View>
 
@@ -205,6 +168,7 @@ export default function LoginScreen() {
     )
 }
 
+// const styles = StyleSheet.create({})
 const styles = StyleSheet.create({
     input: {
         width: 341,
@@ -224,5 +188,3 @@ const styles = StyleSheet.create({
 
     },
 })
-
-

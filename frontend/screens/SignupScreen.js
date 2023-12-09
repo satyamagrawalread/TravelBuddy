@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, TextInput, Image } from 'react-native'
-import Colors from 'frontend/constants/colors.js'
-import BUTTON from 'frontend/components/buttons.js'
+import Colors from '../constants/colors.js'
+import BUTTON from '../components/buttons.js'
 
 export default function SignupScreen() {
 
@@ -34,7 +34,8 @@ export default function SignupScreen() {
                 setErrorMsg("Password & Confirm Password does not match");
             }
             else {
-                fetch(`http://${process.env.LOCALHOST}:3000/signup`, {
+            console.log(process.env.REACT_APP_LOCALHOST);
+                fetch(`http://${process.env.REACT_APP_LOCALHOST}:3000/verify`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -48,7 +49,7 @@ export default function SignupScreen() {
                         setErrorMsg(data.error)
                     }
                     else {
-                        alert('Account created successfully');
+                        alert(data.message);
                         setUserData({...userData,
                             name: '',
                             email: '',
@@ -56,7 +57,7 @@ export default function SignupScreen() {
                             cpassword: ''
                         })
                         setErrorMsg(null);
-                        navigation.navigate('Login');
+                        navigation.navigate('Verify', {'userData': data.userData});
                     }
                 })
                 .catch(error => console.error('Error message:', error));
@@ -190,7 +191,7 @@ export default function SignupScreen() {
                         }}
                     >
                         <Image
-                            source={require('frontend/images/google.png')}
+                            source={require('../images/google.png')}
                             style={{
                                 height: 36,
                                 width: 36,
@@ -216,7 +217,7 @@ export default function SignupScreen() {
                         }}
                     >
                         <Image
-                            source={require('frontend/images/facebook.png')}
+                            source={require('../images/facebook.png')}
                             style={{
                                 height: 36,
                                 width: 36,
