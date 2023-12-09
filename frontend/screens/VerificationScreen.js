@@ -30,7 +30,7 @@ export default function VerificationScreen({route}) {
             }
             else {
                 
-                fetch(`http://${process.env.REACT_APP_LOCALHOST}:3000/signup`, {
+                fetch(`http://192.168.29.98:3000/signup`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
