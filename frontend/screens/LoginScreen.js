@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, TextInput, Image } from 'react-native'
 import Colors from '../constants/colors.js'
 import BUTTON from '../components/buttons.js'
@@ -15,37 +16,54 @@ export default function LoginScreen() {
 
     const [errorMsg, setErrorMsg] = useState(null);
 
+    const storeUser = async (user) => {
+        try {
+            await AsyncStorage.setItem('user', JSON.stringify(user));
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     const handleSignupPress = () => {
         navigation.navigate('Signup')
     }
 
-    const handleHomePress = () => {
-        if(userData.email == '' || userData.password == '') {
+    const handleHomePress = async () => {
+        if (userData.email == '' || userData.password == '') {
             setErrorMsg('All fields are required');
             return;
         }
         else {
             console.log(process.env.REACT_APP_LOCALHOST);
-            fetch(`http://192.168.29.98:3000/login`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(userData)
-                })
+            fetch(`http://${process.env.REACT_APP_LOCALHOST}:3000/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(userData)
+            })
                 .then(res => res.json())
                 .then(data => {
                     console.log(data);
-                    if(data.error) {
+                    if (data.error) {
                         setErrorMsg(data.error)
                     }
                     else {
-                        setUserData({...userData,
-                            email: '',
-                            password: ''
-                        })
-                        setErrorMsg(null);
-                        navigation.navigate('Home');
+                        const user = {
+                            email: userData.email,
+                            token: data.token
+                        }
+                        storeUser(user)
+                            .then((value) => {
+                                setUserData({
+                                    ...userData,
+                                    email: '',
+                                    password: ''
+                                })
+                                setErrorMsg(null);
+                                navigation.navigate('Home');
+                            });
+
                     }
                 })
                 .catch(error => console.error('Error message:', error));
@@ -73,27 +91,27 @@ export default function LoginScreen() {
                 }}>Welcome Back, You have been missed</Text>
 
                 <Text style={{
-                fontSize: 16,
-                fontWeight: '500',
-                marginVertical:10,
-                marginHorizontal:10,
-                color: Colors.primary,  
-                textAlign: 'center'
+                    fontSize: 16,
+                    fontWeight: '500',
+                    marginVertical: 10,
+                    marginHorizontal: 10,
+                    color: Colors.primary,
+                    textAlign: 'center'
                 }}>Don't Have an account?</Text>
-              
-              <TouchableOpacity onPress={handleSignupPress}>
+
+                <TouchableOpacity onPress={handleSignupPress}>
                     <Text style={{
-                fontSize: 16,
-                fontWeight: '500',
-                marginHorizontal:10,
-                color: Colors.primary,  
-                textAlign: 'center',
-                textDecorationLine: 'underline',
-                }}>Sign Up</Text>
+                        fontSize: 16,
+                        fontWeight: '500',
+                        marginHorizontal: 10,
+                        color: Colors.primary,
+                        textAlign: 'center',
+                        textDecorationLine: 'underline',
+                    }}>Sign Up</Text>
                 </TouchableOpacity>
 
                 {
-                    errorMsg && <Text style={{color: 'red'}}>{errorMsg}</Text>
+                    errorMsg && <Text style={{ color: 'red' }}>{errorMsg}</Text>
                 }
 
                 <TextInput
