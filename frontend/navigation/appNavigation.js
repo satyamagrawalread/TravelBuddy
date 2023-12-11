@@ -11,16 +11,23 @@ const Stack = createNativeStackNavigator();
 
 
 export default function appNavigation() {
-    return (
-        <NavigationContainer>
-          <Stack.Navigator initialRouteName='Onboarding'>
-            <Stack.Screen name="Onboarding" options={{headerShown: false}} component={OnboardingScreen} />
-            <Stack.Screen name="Login" options={{headerShown: false}} component={LoginScreen} />
-            <Stack.Screen name="Signup" options={{headerShown: false}} component={SignupScreen} />
-            <Stack.Screen name="Home" options={{headerShown: false}} component={HomeScreen} />
-            <Stack.Screen name="Verify" options={{headerShown: false}} component={VerificationScreen} />
-          </Stack.Navigator>
-        </NavigationContainer>
-      )
+  
+
+
+
+  
+
+  
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName='Onboarding'>
+        <Stack.Screen name="Onboarding" options={{ headerShown: false }} component={OnboardingScreen} />
+        <Stack.Screen name="Login" options={{ headerShown: false }} component={LoginScreen} />
+        <Stack.Screen name="Signup" options={{ headerShown: false }} component={SignupScreen} />
+        <Stack.Screen name="Home" options={{ headerShown: false }} component={HomeScreen} />
+        <Stack.Screen name="Verify" options={{ headerShown: false }} component={VerificationScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  )
 }
 

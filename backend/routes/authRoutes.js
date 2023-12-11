@@ -67,7 +67,7 @@ router.post('/verify', async (req, res) => {
                     verificationCode
                 }
                 mailer(email, verificationCode);
-                res.send({message: "Verification code sent to your email", userData: user});
+                res.status(201).send({message: "Verification code sent to your email", userData: user});
             } catch (error) {
                 console.log(error);
             }
@@ -140,6 +140,13 @@ router.post('/login', async (req, res) => {
     } catch (error) {
 
     }
+});
+
+router.post('/validate', authenticate, (req, res) => {
+    if(req.user) {
+        return res.status(200).send(req.user);
+    }
+    return res.status(422).send({error: "Something went wrong"})
 })
 
 module.exports = router;
