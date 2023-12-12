@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import Config from '../config/config.index'
 import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, TextInput, Image } from 'react-native'
 import Colors from '../constants/colors.js'
 import BUTTON from '../components/buttons.js'
@@ -35,7 +36,7 @@ export default function LoginScreen() {
         }
         else {
             console.log(process.env.REACT_APP_LOCALHOST);
-            fetch(`http://${process.env.REACT_APP_LOCALHOST}:3000/login`, {
+            fetch(`http://${Config.LOCALHOST_IP}:3000/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

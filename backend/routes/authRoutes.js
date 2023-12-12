@@ -144,7 +144,8 @@ router.post('/login', async (req, res) => {
 
 router.post('/validate', authenticate, (req, res) => {
     if(req.user) {
-        return res.status(200).send(req.user);
+        console.log('From route:', req.user);
+        return res.status(200).send({message: 'Token Validated', user: req.user});
     }
     return res.status(422).send({error: "Something went wrong"})
 })

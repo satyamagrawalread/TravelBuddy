@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, ImageBackground, Image, TextInput } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import BUTTON from '../components/buttons'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
+const Tab = createBottomTabNavigator();
+
 
 export default function HomeScreen() {
     const [selectedTab, setSelectedTab] = useState('home');
