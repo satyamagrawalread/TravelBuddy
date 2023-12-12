@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
+import Config from '../config/config.index'
 import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, TextInput, Image } from 'react-native'
 import Colors from '../constants/colors.js'
 import BUTTON from '../components/buttons.js'
@@ -35,7 +36,7 @@ export default function SignupScreen() {
             }
             else {
             console.log(process.env.REACT_APP_LOCALHOST);
-                fetch(`http://${process.env.REACT_APP_LOCALHOST}:3000/verify`, {
+                fetch(`http://${Config.LOCALHOST_IP}:3000/verify`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
