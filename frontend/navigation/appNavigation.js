@@ -5,7 +5,7 @@ import LoginScreen from '../screens/LoginScreen.js';
 import SignupScreen from '../screens/SignupScreen.js';
 import OnboardingScreen from '../screens/OnboardingScreen.js';
 import VerificationScreen from '../screens/VerificationScreen.js';
-import TabNavigator from '../components/TabNavigator.js';
+import TabNavigator from './TabNavigator.js';
 
 const Stack = createNativeStackNavigator();
 
