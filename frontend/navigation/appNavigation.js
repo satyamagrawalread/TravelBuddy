@@ -21,7 +21,6 @@ export default function appNavigation() {
         <Stack.Screen name="Home" options={{ headerShown: false }} component={TabNavigator} />
         <Stack.Screen name="Verify" options={{ headerShown: false }} component={VerificationScreen} />
       </Stack.Navigator>
-      
     </NavigationContainer>
   )
 }
