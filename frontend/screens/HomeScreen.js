@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, ImageBackground, Image, TextInput } from 'react-native'
+import React, { useRef, useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View, ImageBackground, Image, TextInput, ScrollView } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import BUTTON from '../components/buttons'
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+
 
 
 const Tab = createBottomTabNavigator();
@@ -13,10 +13,26 @@ export default function HomeScreen() {
     const [selectedTab, setSelectedTab] = useState('home');
     const [postText, setPostText] = useState('');
     const navigation = useNavigation();
+    const ref = useRef();
+    const [imageData, setImageData] = useState(null);
+
+    const openCamera = async () => {
+        const res = await launchCamera({ mediaType: 'photo' });
+        if (!res.didCancel) {
+            setImageData(res);
+        }
+    }
+    const openGallery = async () => {
+        const res = await launchImageLibrary({ mediaType: 'photo' });
+        if (!res.didCancel) {
+            setImageData(res);
+        }
+    }
+
 
     const handleUserPress = () => {
         navigation.navigate('User')
-    } 
+    }
 
     const handleTabPress = (tab) => {
         setSelectedTab(tab);
@@ -31,27 +47,44 @@ export default function HomeScreen() {
             <View style={styles.logoContainer}>
                 <Image source={require('../images/logo.png')} style={styles.logo} />
             </View>
-
+            {imageData &&
+                <View style={styles.selectedImageView}>
+                    <Image source={{ uri: imageData.assets[0].uri }} style={styles.selectedImage} />
+                    <TouchableOpacity style={styles.removeBtn} onPress={() => {
+                        setImageData(null);
+                    }}>
+                        <Image source={require('../images/close.png')} style={styles.removeIcon} />
+                    </TouchableOpacity>
+                </View>
+            }
             <View style={styles.postContainer}>
                 <View style={styles.postBox}>
                     <View style={styles.rowPost}>
-                    <Image source={require('../images/portrait.jpg')} style={styles.profilePostImg}/>
-                    <TextInput
-                        style={styles.postInput}
-                        placeholder="Write a post..."
-                        multiline
-                        value={postText}
-                        onChangeText={handlePostTextChange}
-                    />
+                        <Image source={require('../images/portrait.jpg')} style={styles.profilePostImg} />
+                        <TouchableOpacity activeOpacity={1} onPress={() => { ref.current.focus() }}>
+                            <TextInput
+                                style={styles.postInput}
+                                placeholder="Write a post..."
+                                multiline
+                                value={postText}
+                                onChangeText={handlePostTextChange}
+                            />
+                        </TouchableOpacity>
                     </View>
                     <View style={styles.separator}></View>
                     <View style={styles.buttonContainer}>
-                        <TouchableOpacity style={styles.addButton}>
+                        <TouchableOpacity style={styles.addButton}
+                            onPress={() => {
+                                openGallery();
+                            }}>
                             <Image source={require('../images/addimage.png')} style={styles.buttonIcon} />
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.addButton}>
-                            <Image source={require('../images/map.png')} style={styles.buttonIcon} />
+                        <TouchableOpacity style={styles.addButton}
+                            onPress={() => {
+                                openCamera();
+                            }}>
+                            <Image source={require('../images/camera.png')} style={styles.buttonIcon} />
                         </TouchableOpacity>
 
                         <TouchableOpacity style={styles.postButton}>
@@ -141,10 +174,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginBottom: 16,
     },
-    rowPost:{
+    rowPost: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginHorizontal:10,
+        marginHorizontal: 10,
     },
     postBox: {
         width: '80%',
@@ -170,8 +203,8 @@ const styles = StyleSheet.create({
     },
     addButton: {
         marginRight: 12,
-        borderWidth:1,
-        borderColor:'#ccc',
+        borderWidth: 1,
+        borderColor: '#ccc',
         padding: 5,
         borderRadius: 50,
     },
@@ -179,22 +212,50 @@ const styles = StyleSheet.create({
         width: 25,
         height: 25,
     },
-    profilePostImg:{
-     width:35,
-     height:35,
-     borderRadius:50,
+    profilePostImg: {
+        width: 35,
+        height: 35,
+        borderRadius: 50,
     },
-    postButton:{
-        width:100,
-        marginHorizontal:90,
+    postButton: {
+        width: 100,
+        marginHorizontal: 90,
         backgroundColor: 'rgba(237, 114, 46, 0.8)',
-        borderColor:'#ccc',
+        borderColor: '#ccc',
         padding: 8,
         borderRadius: 50,
     },
-    buttonText:{
+    buttonText: {
         textAlign: 'center',
         color: '#fff',
         fontWeight: 'bold',
+    },
+    selectedImageView: {
+        width: '90%',
+        height: 200,
+        marginTop: 20,
+        borderRadius: 10,
+        alignSelf: 'center'
+    },
+    selectedImage: {
+        width: '100%',
+        height: '100%',
+        objectFit: 'contain',
+        borderRadius: 10,
+    },
+    removeBtn: {
+        width: 30,
+        height: 30,
+        backgroundColor: 'white',
+        borderRadius: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+        position: 'absolute',
+        top: 20,
+        right: 20,
+    },
+    removeIcon: {
+        width: 20,
+        height: 20,
     }
 });

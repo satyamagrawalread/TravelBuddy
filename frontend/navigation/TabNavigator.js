@@ -4,7 +4,9 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import HomeScreen from '../screens/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import AddPostScreen from '../screens/AddPostScreen';
+import Ionicons from 'react-native-vector-icons/Ionicons'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import EvilIcons from 'react-native-vector-icons/EvilIcons'
 
 const Tab = createBottomTabNavigator();
 
@@ -17,14 +19,19 @@ const TabNavigator = () => {
   
               if (route.name === 'AddPostScreen') {
                 iconName = focused
-                  ? 'propane'
-                  : 'propane';
+                  ? 'feed'
+                  : 'feed';
+              return <MaterialIcons name={iconName} size={size} color={color} />;
               } else if (route.name === 'HomeScreen') {
-                iconName = focused ? 'ios-list' : 'ios-list-outline';
+                iconName = focused ? 'home' : 'home-outline';
+                return <Ionicons name={iconName} size={size} color={color} />;
+              }
+              else if (route.name === 'ProfileScreen') {
+                iconName = focused ? 'user' : 'user';
+                return <EvilIcons name={iconName} size={size} color={color} />;
               }
   
               // You can return any component that you like here!
-              return <MaterialIcons name={iconName} size={size} color={color} />;
             },
             tabBarActiveTintColor: 'tomato',
             tabBarInactiveTintColor: 'gray',
