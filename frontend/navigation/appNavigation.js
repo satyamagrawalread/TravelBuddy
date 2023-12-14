@@ -6,6 +6,7 @@ import SignupScreen from '../screens/SignupScreen.js';
 import OnboardingScreen from '../screens/OnboardingScreen.js';
 import VerificationScreen from '../screens/VerificationScreen.js';
 import TabNavigator from './TabNavigator.js';
+import AddFeedScreen from '../screens/AddFeedScreen.js';
 
 const Stack = createNativeStackNavigator();
 
@@ -20,6 +21,7 @@ export default function appNavigation() {
         <Stack.Screen name="Signup" options={{ headerShown: false }} component={SignupScreen} />
         <Stack.Screen name="Home" options={{ headerShown: false }} component={TabNavigator} />
         <Stack.Screen name="Verify" options={{ headerShown: false }} component={VerificationScreen} />
+        <Stack.Screen name="AddFeed" options={{ headerShown: false }} component={AddFeedScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   )

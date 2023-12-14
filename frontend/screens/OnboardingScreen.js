@@ -4,12 +4,14 @@ import { StyleSheet, View, Image, ActivityIndicator } from 'react-native';
 import Config from '../config/config.index';
 import Onboarding from 'react-native-onboarding-swiper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import SplashScreen from 'react-native-splash-screen';
 
 export default function OnboardingScreen() {
   const navigation = useNavigation();
   const [isValidating, setIsValidating] = useState(true);
 
   useEffect(() => {
+    SplashScreen.hide();
     const getUser = async () => {
       try {
         const savedUser = await AsyncStorage.getItem('user');

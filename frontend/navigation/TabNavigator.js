@@ -3,10 +3,10 @@ import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import HomeScreen from '../screens/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen';
-import AddPostScreen from '../screens/AddPostScreen';
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
+import FeedScreen from '../screens/FeedScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -17,16 +17,16 @@ const TabNavigator = () => {
             tabBarIcon: ({ focused, color, size }) => {
               let iconName;
   
-              if (route.name === 'AddPostScreen') {
+              if (route.name === 'Feed') {
                 iconName = focused
                   ? 'feed'
                   : 'feed';
               return <MaterialIcons name={iconName} size={size} color={color} />;
-              } else if (route.name === 'HomeScreen') {
-                iconName = focused ? 'home' : 'home-outline';
+              } else if (route.name === 'Chat') {
+                iconName = focused ? 'chatbox-ellipses' : 'chatbox-ellipses-outline';
                 return <Ionicons name={iconName} size={size} color={color} />;
               }
-              else if (route.name === 'ProfileScreen') {
+              else if (route.name === 'User') {
                 iconName = focused ? 'user' : 'user';
                 return <EvilIcons name={iconName} size={size} color={color} />;
               }
@@ -37,10 +37,10 @@ const TabNavigator = () => {
             tabBarInactiveTintColor: 'gray',
           })}
         >
-            <Tab.Screen name="AddPostScreen" component={AddPostScreen} options={{ headerShown: false }} />
-            <Tab.Screen name="HomeScreen" component={HomeScreen} options={{ headerShown: false }} />
+            <Tab.Screen name="Feed" component={FeedScreen} options={{ headerShown: false }} />
+            <Tab.Screen name="Chat" component={HomeScreen} options={{ headerShown: false }} />
 
-            <Tab.Screen name="ProfileScreen" component={ProfileScreen} options={{ headerShown: false }} />
+            <Tab.Screen name="User" component={ProfileScreen} options={{ headerShown: false }} />
             {/* <Tab.Screen name="Login" component={LoginScreen} />
             <Tab.Screen name="Onboarding" component={HomeScreen} /> */}
         </Tab.Navigator>
