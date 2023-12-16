@@ -2,7 +2,6 @@ import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, TextInput, Imag
 import React, { useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import Config from '../config/config.index'
-import Colors from '../constants/colors.js'
 import BUTTON from '../components/buttons.js'
 
 export default function VerificationScreen({route}) {
@@ -31,7 +30,7 @@ export default function VerificationScreen({route}) {
             }
             else {
                 
-                fetch(`http://${Config.LOCALHOST_IP}:3000/signup`, {
+                fetch(`${Config.LOCALHOST}/signup`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

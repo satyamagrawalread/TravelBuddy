@@ -1,2 +1,2 @@
-import { LOCALHOST_IP } from '@env';
-export default {LOCALHOST_IP};
+import { LOCALHOST } from '@env';
+export default {LOCALHOST};

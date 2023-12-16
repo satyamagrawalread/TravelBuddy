@@ -37,57 +37,62 @@ export default function AddFeedScreen() {
 
     return (
         <View style={styles.container}>
-            <AntDesign name='back' size={30} />
-            <View style={styles.logoContainer}>
-                <Image source={require('../images/logo.png')} style={styles.logo} />
-            </View>
-            {imageData &&
-                <View style={styles.selectedImageView}>
-                    <Image source={{ uri: imageData.assets[0].uri }} style={styles.selectedImage} />
-                    <TouchableOpacity style={styles.removeBtn} onPress={() => {
-                        setImageData(null);
-                    }}>
-                        <Image source={require('../images/close.png')} style={styles.removeIcon} />
-                    </TouchableOpacity>
+            <TouchableOpacity style={styles.backBtn} onPress={() => { navigation.goBack() }}>
+                <AntDesign name='back' size={30} />
+            </TouchableOpacity>
+
+            <ScrollView style={styles.mainContainer}>
+                <View style={styles.logoContainer}>
+                    <Image source={require('../images/logo.png')} style={styles.logo} />
                 </View>
-            }
-            <View style={styles.postContainer}>
-                <View style={styles.postBox}>
-                    <View style={styles.rowPost}>
-                        <Image source={require('../images/portrait.jpg')} style={styles.profilePostImg} />
-                        <TouchableOpacity activeOpacity={1} onPress={() => { ref.current.focus() }}>
-                            <TextInput
-                                style={styles.postInput}
-                                placeholder="Write a post..."
-                                multiline
-                                value={postText}
-                                onChangeText={handlePostTextChange}
-                            />
+                {imageData &&
+                    <View style={styles.selectedImageView}>
+                        <Image source={{ uri: imageData.assets[0].uri }} style={styles.selectedImage} />
+                        <TouchableOpacity style={styles.removeBtn} onPress={() => {
+                            setImageData(null);
+                        }}>
+                            <Image source={require('../images/close.png')} style={styles.removeIcon} />
                         </TouchableOpacity>
                     </View>
-                    <View style={styles.separator}></View>
-                    <View style={styles.buttonContainer}>
-                        <TouchableOpacity style={styles.addButton}
-                            onPress={() => {
-                                openGallery();
-                            }}>
-                            <Image source={require('../images/addimage.png')} style={styles.buttonIcon} />
-                        </TouchableOpacity>
+                }
+                <View style={styles.postContainer}>
+                    <View style={styles.postBox}>
+                        <View style={styles.rowPost}>
+                            <Image source={require('../images/portrait.jpg')} style={styles.profilePostImg} />
+                            <TouchableOpacity activeOpacity={1} onPress={() => { ref.current.focus() }}>
+                                <TextInput
+                                    style={styles.postInput}
+                                    placeholder="Write a post..."
+                                    multiline
+                                    value={postText}
+                                    onChangeText={handlePostTextChange}
+                                />
+                            </TouchableOpacity>
+                        </View>
+                        <View style={styles.separator}></View>
+                        <View style={styles.buttonContainer}>
+                            <TouchableOpacity style={styles.addButton}
+                                onPress={() => {
+                                    openGallery();
+                                }}>
+                                <Image source={require('../images/addimage.png')} style={styles.buttonIcon} />
+                            </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.addButton}
-                            onPress={() => {
-                                openCamera();
-                            }}>
-                            <Image source={require('../images/camera.png')} style={styles.buttonIcon} />
-                        </TouchableOpacity>
+                            <TouchableOpacity style={styles.addButton}
+                                onPress={() => {
+                                    openCamera();
+                                }}>
+                                <Image source={require('../images/camera.png')} style={styles.buttonIcon} />
+                            </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.postButton}>
-                            <Text style={styles.buttonText}>Post</Text>
-                        </TouchableOpacity>
+                            <TouchableOpacity style={styles.postButton}>
+                                <Text style={styles.buttonText}>Post</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
+
                 </View>
-            
-            </View>
+            </ScrollView>
 
         </View>
     );
@@ -97,15 +102,21 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         // justifyContent: 'flex-end',
-        alignItems: 'center',
+        // alignItems: 'center',
+    },
+    backBtn: {
+        margin: 10
+    },
+    mainContainer: {
+        flexDirection: 'column',
+        
     },
     logoContainer: {
-        position: 'absolute',
-        top: 0,
-        width: '100%',
-        justifyContent: 'center',
-        alignItems: 'center',
-        paddingTop: 16, // Add padding to separate the logo from the top
+        // position: 'absolute',
+        // top: 0,
+        // width: '100%',
+        // justifyContent: 'center',
+        alignItems: 'center'
     },
     logo: {
         width: 80,

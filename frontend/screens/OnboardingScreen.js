@@ -19,7 +19,7 @@ export default function OnboardingScreen() {
 
         if (user) {
           console.log('token exists');
-          fetch(`http://${Config.LOCALHOST_IP}:3000/validate`, {
+          fetch(`${Config.LOCALHOST}/validate`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

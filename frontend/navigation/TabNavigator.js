@@ -2,11 +2,11 @@ import { View, Text } from 'react-native'
 import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import HomeScreen from '../screens/HomeScreen';
-import ProfileScreen from '../screens/ProfileScreen';
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import FeedScreen from '../screens/FeedScreen';
+import UserScreen from '../screens/UserScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -40,7 +40,7 @@ const TabNavigator = () => {
             <Tab.Screen name="Feed" component={FeedScreen} options={{ headerShown: false }} />
             <Tab.Screen name="Chat" component={HomeScreen} options={{ headerShown: false }} />
 
-            <Tab.Screen name="User" component={ProfileScreen} options={{ headerShown: false }} />
+            <Tab.Screen name="User" component={UserScreen} options={{ headerShown: false }} />
             {/* <Tab.Screen name="Login" component={LoginScreen} />
             <Tab.Screen name="Onboarding" component={HomeScreen} /> */}
         </Tab.Navigator>

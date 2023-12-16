@@ -14,7 +14,11 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true
-    }
+    },
+    timestamp: {
+        type: Date,
+        default: Date.now,
+    },
 });
 
 //Encrypt the password

@@ -36,7 +36,7 @@ export default function SignupScreen() {
             }
             else {
             console.log(process.env.REACT_APP_LOCALHOST);
-                fetch(`http://${Config.LOCALHOST_IP}:3000/verify`, {
+                fetch(`${Config.LOCALHOST}/verify`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

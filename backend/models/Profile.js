@@ -7,8 +7,15 @@ const profileSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
+    image_url: {
+        type: String
+    },
     name: {
         type: String,
+        required: true
+    },
+    mobile: {
+        type: Number,
         required: true
     },
     location: {

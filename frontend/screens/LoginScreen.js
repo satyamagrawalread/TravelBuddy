@@ -36,7 +36,7 @@ export default function LoginScreen() {
         }
         else {
             console.log(process.env.REACT_APP_LOCALHOST);
-            fetch(`http://${Config.LOCALHOST_IP}:3000/login`, {
+            fetch(`${Config.LOCALHOST}/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
