@@ -4,48 +4,125 @@ import { useNavigation } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import AntDesign from 'react-native-vector-icons/AntDesign'
+import ImagePicker from 'react-native-image-crop-picker';
+import MyCarousel from '../components/ui/MyCarousel';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ErrorHandler } from '../components/ErrorHandler/ErrorHandler';
+import { useErrorBoundary } from 'react-error-boundary';
+import Config from '../config/config.index';
+import { ActivityIndicator } from 'react-native';
 
 
 
 const Tab = createBottomTabNavigator();
 
+const AddFeedScreen = () => {
+    return (
+        <ErrorHandler>
+          <ChildAddFeedScreen />
+        </ErrorHandler>
+      );
+}
 
-export default function AddFeedScreen() {
-    const [postText, setPostText] = useState('');
+
+function ChildAddFeedScreen() {
+    const [description, setDescription] = useState('');
     const navigation = useNavigation();
     const ref = useRef();
-    const [imageData, setImageData] = useState(null);
+    const [imageData, setImageData] = useState([]);
+    const { showBoundary } = useErrorBoundary();
+    const [isLoading, setIsLoading] = useState(false);
 
     const openCamera = async () => {
-        const res = await launchCamera({ mediaType: 'photo' });
-        if (!res.didCancel) {
-            setImageData(res);
-        }
+        ImagePicker.openCamera({
+            width: 300,
+            height: 400,
+            cropping: true,
+        }).then(image => {
+            console.log(image);
+            setImageData([image.path])
+        }).catch((error) => {
+            console.error('line31:', error);
+        });
     }
     const openGallery = async () => {
-        const res = await launchImageLibrary({ mediaType: 'photo' });
-        if (!res.didCancel) {
-            setImageData(res);
-        }
+        ImagePicker.openPicker({
+            multiple: true,
+            width: 300,
+            height: 400,
+            cropping: true,
+        }).then(images => {
+            console.log(images);
+            let temp_images_path = images.map((image) => image.path)
+            setImageData(temp_images_path);
+        }).catch((error) => {
+            console.error('line45:', error);
+        });
     }
 
 
 
     const handlePostTextChange = (text) => {
-        setPostText(text);
+        setDescription(text);
     };
 
+    const onPost = async () => {
+        const user = await AsyncStorage.getItem('user');
+        if (!user) {
+            return;
+        }
+        setIsLoading(true);
+        const formData = new FormData();
+        imageData.forEach((imagePath, index) => {
+            console.log(imagePath);
+            formData.append('images', {
+                uri: imagePath,
+                type: 'image/jpeg',
+                name: `my_image${index + 1}.jpg`,
+            });
+        });
+        formData.append('email', JSON.parse(user).email);
+        formData.append('description', description);
+        console.log(formData);
+        try {
+            console.log(Config.LOCALHOST);
+            const response = await fetch(`${Config.LOCALHOST}/addPost`, {
+              method: 'POST',
+              body: formData,
+              headers: {
+                'Content-Type': 'multipart/form-data',
+              },
+            });
+            // Handle the response as needed
+              const result = await response.json();
+              if(result.error) {
+                console.error('line95 Error uploading image:', result.error);
+              }
+              console.log('Image uploaded:', result);
+              setImageData([]);
+              setDescription('');
+              setIsLoading(false);
+              alert("Post added successfully");
+          } catch (error) {
+            showBoundary({myMessage: "Couldn't upload the post"});
+            console.error('Error uploading image:', error);
+          }
+    }
+    if (isLoading) return (
+        <View style={styles.loaderContainer}>
+          <ActivityIndicator size='large' />
+        </View>
+      )
     return (
         <View style={styles.container}>
             <TouchableOpacity style={styles.backBtn} onPress={() => { navigation.goBack() }}>
                 <AntDesign name='back' size={30} />
             </TouchableOpacity>
-
             <ScrollView style={styles.mainContainer}>
                 <View style={styles.logoContainer}>
                     <Image source={require('../images/logo.png')} style={styles.logo} />
                 </View>
-                {imageData &&
+                {/* {imageData &&
                     <View style={styles.selectedImageView}>
                         <Image source={{ uri: imageData.assets[0].uri }} style={styles.selectedImage} />
                         <TouchableOpacity style={styles.removeBtn} onPress={() => {
@@ -54,17 +131,25 @@ export default function AddFeedScreen() {
                             <Image source={require('../images/close.png')} style={styles.removeIcon} />
                         </TouchableOpacity>
                     </View>
-                }
+                } */}
+                {imageData != [] && <View>
+                    <TouchableOpacity style={{ alignSelf: 'flex-end' }} onPress={() => {
+                        setImageData([]);
+                    }}>
+                        <Image source={require('../images/close.png')} style={styles.removeIcon} />
+                    </TouchableOpacity>
+                    <MyCarousel imageData={imageData} />
+                </View>}
                 <View style={styles.postContainer}>
                     <View style={styles.postBox}>
                         <View style={styles.rowPost}>
                             <Image source={require('../images/portrait.jpg')} style={styles.profilePostImg} />
                             <TouchableOpacity activeOpacity={1} onPress={() => { ref.current.focus() }}>
                                 <TextInput
-                                    style={styles.postInput}
+                                    style={styles.descriptionInput}
                                     placeholder="Write a post..."
                                     multiline
-                                    value={postText}
+                                    value={description}
                                     onChangeText={handlePostTextChange}
                                 />
                             </TouchableOpacity>
@@ -85,7 +170,9 @@ export default function AddFeedScreen() {
                                 <Image source={require('../images/camera.png')} style={styles.buttonIcon} />
                             </TouchableOpacity>
 
-                            <TouchableOpacity style={styles.postButton}>
+                            <TouchableOpacity style={styles.postButton} onPress={() => {
+                                onPost();
+                            }}>
                                 <Text style={styles.buttonText}>Post</Text>
                             </TouchableOpacity>
                         </View>
@@ -98,7 +185,13 @@ export default function AddFeedScreen() {
     );
 }
 
+export default AddFeedScreen;
+
 const styles = StyleSheet.create({
+    loaderContainer: {
+        height: '100%',
+        justifyContent: 'center'
+      },
     container: {
         flex: 1,
         // justifyContent: 'flex-end',
@@ -109,7 +202,7 @@ const styles = StyleSheet.create({
     },
     mainContainer: {
         flexDirection: 'column',
-        
+
     },
     logoContainer: {
         // position: 'absolute',
@@ -166,7 +259,7 @@ const styles = StyleSheet.create({
         padding: 12,
         marginBottom: 12,
     },
-    postInput: {
+    descriptionInput: {
         padding: 12,
         color: '#888',
     },

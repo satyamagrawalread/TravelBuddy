@@ -7,8 +7,9 @@ const profileSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
-    image_url: {
-        type: String
+    image_data: {
+        image_url: String,
+        public_id: String,
     },
     name: {
         type: String,

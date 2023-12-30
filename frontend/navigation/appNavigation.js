@@ -8,6 +8,7 @@ import VerificationScreen from '../screens/VerificationScreen.js';
 import TabNavigator from './TabNavigator.js';
 import AddFeedScreen from '../screens/AddFeedScreen.js';
 import ProfileScreen from '../screens/ProfileScreen.js';
+import ViewProfileImageScreen from '../screens/ViewProfileImageScreen.js';
 
 const Stack = createNativeStackNavigator();
 
@@ -24,6 +25,7 @@ export default function appNavigation() {
         <Stack.Screen name="Verify" options={{ headerShown: false }} component={VerificationScreen} />
         <Stack.Screen name="AddFeed" options={{ headerShown: false }} component={AddFeedScreen} />
         <Stack.Screen name="Profile" options={{ headerShown: false }} component={ProfileScreen} />
+        <Stack.Screen name="ProfileImage" options={{ headerShown: false }} component={ViewProfileImageScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   )

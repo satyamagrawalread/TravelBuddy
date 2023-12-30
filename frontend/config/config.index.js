@@ -1,2 +1,2 @@
-import { LOCALHOST } from '@env';
+const LOCALHOST = process.env.LOCALHOST;
 export default {LOCALHOST};

@@ -1,7 +1,9 @@
+require('dotenv').config();
 const express = require('express');
 const router = new express.Router();
 const mongoose = require('mongoose');
 const Profile = mongoose.model('Profile');
+
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
 
 router.post('/profileCheck', (req, res) => {
@@ -137,6 +139,8 @@ router.post('/updateProfile', (req, res) => {
         return res.status(201).send({error: "Something went wrong"});
     }
 })
+
+
 
 
 module.exports = router;
