@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, ScrollView, StyleSheet, RefreshControl } from 'react-native'
+import { View, Text, TouchableOpacity, ScrollView, StyleSheet, RefreshControl, FlatList } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Entypo from 'react-native-vector-icons/Entypo'
 import { useNavigation } from '@react-navigation/native'
@@ -10,6 +10,7 @@ const FeedScreen = () => {
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [isScollable, setIsScrollable] = useState(true);
 
   useEffect(() => {
     getAllPosts();
@@ -51,6 +52,8 @@ const FeedScreen = () => {
       </View>
       <ScrollView style={styles.mainContainer}
       showsHorizontalScrollIndicator={true} 
+      showsVerticalScrollIndicator={false}
+      scrollEnabled={isScollable}
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={getAllPosts} />
       }>
@@ -60,7 +63,7 @@ const FeedScreen = () => {
           })
           return <View key={index} style={styles.postView}>
             {post.description && <Text>{post.description}</Text>}
-            {temp_images_url && <MyCarousel imageData={temp_images_url} />}
+            {temp_images_url && <MyCarousel imageData={temp_images_url} isScollable={isScollable} setIsScrollable={setIsScrollable} />}
           </View>
         })}
       </ScrollView>

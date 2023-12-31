@@ -5,9 +5,11 @@ import type { ICarouselInstance } from "react-native-reanimated-carousel";
 
 interface MyCarouselProps {
   imageData: string[];
+  isScrollable: boolean;
+  setIsScrollable: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const MyCarousel: React.FC<MyCarouselProps> = ({ imageData }) => {
+const MyCarousel: React.FC<MyCarouselProps> = ({ imageData, isScrollable, setIsScrollable }) => {
   const ref = React.useRef<ICarouselInstance>(null);
   const width = Dimensions.get('window').width * 0.85;
 
@@ -23,11 +25,13 @@ const MyCarousel: React.FC<MyCarouselProps> = ({ imageData }) => {
         pagingEnabled={true}
         overscrollEnabled={false}
         data={imageData}
-        scrollAnimationDuration={1000}
+        scrollAnimationDuration={500}
         onSnapToItem={(index) => console.log('current index:', index)}
         // onConfigurePanGesture={(gestureChain) => (
         //   gestureChain.activeOffsetX([-10, 10])
         // )}
+        onScrollBegin={() => {setIsScrollable && setIsScrollable(false)}}
+        onScrollEnd={() => {setIsScrollable && setIsScrollable(true)}}
         renderItem={({ index }) => (
           <View
           style={{ flex: 1, marginLeft: "2.5%" }}

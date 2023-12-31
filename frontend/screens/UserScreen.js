@@ -142,7 +142,11 @@ const ChildUserScreen = () => {
         },
       });
       // Handle the response as needed
+      if(!response.ok) {
+        throw new Error("response")
+      }
         const result = await response.json();
+        
         console.log('Image uploaded:', result);
         await profileImageCheck();
     } catch (error) {

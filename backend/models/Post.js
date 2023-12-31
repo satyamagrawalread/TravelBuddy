@@ -17,7 +17,11 @@ const postSchema = new mongoose.Schema({
     description: {
         type: String
     },
-    post_images_data: [postImageSchema]
+    post_images_data: [postImageSchema],
+    timestamp: {
+        type: Date,
+        default: Date.now,
+    },
 })
 
 mongoose.model("Post", postSchema);

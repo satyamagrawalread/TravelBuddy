@@ -19,9 +19,9 @@ const Tab = createBottomTabNavigator();
 const AddFeedScreen = () => {
     return (
         <ErrorHandler>
-          <ChildAddFeedScreen />
+            <ChildAddFeedScreen />
         </ErrorHandler>
-      );
+    );
 }
 
 
@@ -87,38 +87,38 @@ function ChildAddFeedScreen() {
         try {
             console.log(Config.LOCALHOST);
             const response = await fetch(`${Config.LOCALHOST}/addPost`, {
-              method: 'POST',
-              body: formData,
-              headers: {
-                'Content-Type': 'multipart/form-data',
-              },
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
             });
             // Handle the response as needed
-              const result = await response.json();
-              if(result.error) {
+            const result = await response.json();
+            if (result.error) {
                 console.error('line95 Error uploading image:', result.error);
-              }
-              console.log('Image uploaded:', result);
-              setImageData([]);
-              setDescription('');
-              setIsLoading(false);
-              alert("Post added successfully");
-          } catch (error) {
-            showBoundary({myMessage: "Couldn't upload the post"});
+            }
+            console.log('Image uploaded:', result);
+            setImageData([]);
+            setDescription('');
+            setIsLoading(false);
+            alert("Post added successfully");
+        } catch (error) {
+            showBoundary({ myMessage: "Couldn't upload the post" });
             console.error('Error uploading image:', error);
-          }
+        }
     }
     if (isLoading) return (
         <View style={styles.loaderContainer}>
-          <ActivityIndicator size='large' />
+            <ActivityIndicator size='large' />
         </View>
-      )
+    )
     return (
         <View style={styles.container}>
             <TouchableOpacity style={styles.backBtn} onPress={() => { navigation.goBack() }}>
                 <AntDesign name='back' size={30} />
             </TouchableOpacity>
-            <ScrollView style={styles.mainContainer}>
+            <View style={styles.mainContainer}>
                 <View style={styles.logoContainer}>
                     <Image source={require('../images/logo.png')} style={styles.logo} />
                 </View>
@@ -132,7 +132,7 @@ function ChildAddFeedScreen() {
                         </TouchableOpacity>
                     </View>
                 } */}
-                {imageData != [] && <View>
+                {imageData.length > 0 && <View style={{height: 250}}>
                     <TouchableOpacity style={{ alignSelf: 'flex-end' }} onPress={() => {
                         setImageData([]);
                     }}>
@@ -179,7 +179,7 @@ function ChildAddFeedScreen() {
                     </View>
 
                 </View>
-            </ScrollView>
+            </View>
 
         </View>
     );
@@ -191,9 +191,10 @@ const styles = StyleSheet.create({
     loaderContainer: {
         height: '100%',
         justifyContent: 'center'
-      },
+    },
     container: {
         flex: 1,
+        // backgroundColor: 'green',
         // justifyContent: 'flex-end',
         // alignItems: 'center',
     },
@@ -201,7 +202,10 @@ const styles = StyleSheet.create({
         margin: 10
     },
     mainContainer: {
+        flex: 1,
+        // backgroundColor: 'red',
         flexDirection: 'column',
+        // justifyContent: 'flex-start',
 
     },
     logoContainer: {
@@ -215,16 +219,15 @@ const styles = StyleSheet.create({
         width: 80,
         height: 80,
     },
-    navbar: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        alignItems: 'center',
-        width: '100%',
-        height: 70,
-        backgroundColor: '#fff',
-    },
+    // navbar: {
+    //     flexDirection: 'row',
+    //     justifyContent: 'space-around',
+    //     alignItems: 'center',
+    //     width: '100%',
+    //     height: 70,
+    //     backgroundColor: '#fff',
+    // },
     iconContainer: {
-        flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
         marginLeft: '5%',
@@ -242,8 +245,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     postContainer: {
+        flex: 1,
         width: '100%',
+        // minHeight: 200,
+        flexDirection: 'column',
+        // backgroundColor: 'black',
         alignItems: 'center',
+        justifyContent: 'flex-end',
+        paddingBottom: 20,
         marginBottom: 16,
     },
     rowPost: {
@@ -253,7 +262,6 @@ const styles = StyleSheet.create({
     },
     postBox: {
         width: '80%',
-        // height: '50%',
         borderRadius: 20,
         backgroundColor: '#fff',
         padding: 12,
